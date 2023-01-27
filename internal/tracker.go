@@ -26,7 +26,19 @@ const (
 	//NotesFile = ".notes.json"
 )
 
-type Bug struct {
+type Storage interface {
+	Add(int, string, string, int, bool) error
+	List() error
+	Listall() error
+	Solve(int) error
+	Remove(int) error
+	Reopen(int) error
+	Relate(int, int) error
+	Load(string) error
+	Store(string) error
+}
+
+type bug struct {
 	ID        int
 	What      string
 	Steps     string
@@ -37,40 +49,13 @@ type Bug struct {
 	Related   []int
 }
 
-type Bugs []Bug
-
-func (t *Bugs) Load(filename string) error {
-	file, err := os.ReadFile(filename)
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return nil
-		}
-		return err
-	}
-
-	if len(file) == 0 {
-		return err
-	}
-
-	err = json.Unmarshal(file, t)
-	if err != nil {
-		return err
-	}
-	return nil
+type storage struct {
+	bugs []bug
 }
 
-func (t *Bugs) Store(filename string) error {
-	data, err := json.Marshal(t)
-	if err != nil {
-		return err
-	}
-	return os.WriteFile(filename, data, 0664)
-
-}
-
-func (t *Bugs) Add(ID int, what string, steps string, priority int, solved bool) {
+func (t *storage) Add(ID int, what string, steps string, priority int, solved bool) {
 	var related []int
-	tracker := Bug{
+	tracker := bug{
 		ID,
 		what,
 		steps,
@@ -80,10 +65,10 @@ func (t *Bugs) Add(ID int, what string, steps string, priority int, solved bool)
 		solved,
 		related,
 	}
-	*t = append(*t, tracker)
+	t.bugs = append(t.bugs, tracker)
 }
 
-func (t *Bugs) List() {
+func (t *storage) List() {
 
 	table := simpletable.New()
 
@@ -101,7 +86,7 @@ func (t *Bugs) List() {
 
 	var cells [][]*simpletable.Cell
 
-	for _, bug := range *t {
+	for _, bug := range t.bugs {
 		id := bug.ID
 		what := bug.What
 		how := bug.Steps
@@ -144,7 +129,7 @@ func (t *Bugs) List() {
 	table.Println()
 }
 
-func (t *Bugs) ListAll() {
+func (t *storage) ListAll() {
 
 	table := simpletable.New()
 
@@ -162,7 +147,7 @@ func (t *Bugs) ListAll() {
 
 	var cells [][]*simpletable.Cell
 
-	for _, bug := range *t {
+	for _, bug := range t.bugs {
 		id := bug.ID
 		what := bug.What
 		how := bug.Steps
@@ -203,8 +188,8 @@ func (t *Bugs) ListAll() {
 	table.Println()
 }
 
-func (t *Bugs) Solve(index int) error {
-	ls := *t
+func (t *storage) Solve(index int) error {
+	ls := t.bugs
 	if index <= 0 || index > len(ls) {
 		return errors.New("invalid index")
 	}
@@ -215,8 +200,8 @@ func (t *Bugs) Solve(index int) error {
 	return nil
 }
 
-func (t *Bugs) Remove(index int) error {
-	ls := *t
+func (t *storage) Remove(index int) error {
+	ls := t.bugs
 	if index <= 0 || index > len(ls) {
 		return errors.New("invalid index")
 	}
@@ -231,8 +216,8 @@ func (t *Bugs) Remove(index int) error {
 	return nil
 }
 
-func (t *Bugs) Reopen(index int) error {
-	ls := *t
+func (t *storage) Reopen(index int) error {
+	ls := t.bugs
 	if index <= 0 || index > len(ls) {
 		return errors.New("invalid index")
 	}
@@ -243,8 +228,9 @@ func (t *Bugs) Reopen(index int) error {
 	return nil
 }
 
-func (t *Bugs) Relate(id int) error {
-	ls := *t
+func (t *storage) Relate(id int) error {
+	ls := t.bugs
+
 	file, err := os.ReadFile(".id")
 	if err != nil {
 		os.Exit(1)
@@ -259,4 +245,33 @@ func (t *Bugs) Relate(id int) error {
 	ls[id-1].Related = append(ls[id-1].Related, id)
 
 	return nil
+}
+
+func (t *storage) Load(filename string) error {
+	file, err := os.ReadFile(filename)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
+		return err
+	}
+
+	if len(file) == 0 {
+		return err
+	}
+
+	err = json.Unmarshal(file, t)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *storage) Store(filename string) error {
+	data, err := json.Marshal(t)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filename, data, 0664)
+
 }

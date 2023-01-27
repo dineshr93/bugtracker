@@ -17,10 +17,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
-	"github.com/faculerena/bugtracker/internal"
-	"os"
-
 	"github.com/spf13/cobra"
 )
 
@@ -30,14 +26,15 @@ var listallCmd = &cobra.Command{
 	Short: "List all bugs",
 	Long:  `Use 'tracker list' to retrieve ALL bugs saved on the tracker`,
 	Run: func(cmd *cobra.Command, args []string) {
-		t := &tracker.Bugs{}
-		err := t.Load(tracker.File)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
-		t.ListAll()
-
+		/*
+			t := &tracker.storage{}
+			err := t.Load(tracker.File)
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(1)
+			}
+			t.ListAll()
+		*/
 	},
 }
 

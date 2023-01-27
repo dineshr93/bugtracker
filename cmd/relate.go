@@ -17,11 +17,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
-	"github.com/faculerena/bugtracker/internal"
-	"os"
-	"strconv"
-
 	"github.com/spf13/cobra"
 )
 
@@ -32,40 +27,40 @@ var relateCmd = &cobra.Command{
 	Long: `Use relate <ID_to_relate> <ID_target_bug> to add the first bug to the "related bugs" 
 in the target bug.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		/*
+			t := &tracker.storage{}
 
-		t := &tracker.Bugs{}
+			if err := t.Load(tracker.File); err != nil {
+				fmt.Println(err.Error())
+				os.Exit(1)
+			}
 
-		if err := t.Load(tracker.File); err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
+			if len(args) != 2 {
+				os.Exit(1)
+			}
 
-		if len(args) != 2 {
-			os.Exit(1)
-		}
+			toRelate, err := strconv.Atoi(args[0])
+			if err != nil {
+				os.Exit(1)
+			}
 
-		toRelate, err := strconv.Atoi(args[0])
-		if err != nil {
-			os.Exit(1)
-		}
+			target, err := strconv.Atoi(args[1])
+			if err != nil {
+				os.Exit(1)
+			}
 
-		target, err := strconv.Atoi(args[1])
-		if err != nil {
-			os.Exit(1)
-		}
+			ls := *t
 
-		ls := *t
+			ls[target-1].Related = append(ls[target-1].Related, toRelate)
 
-		ls[target-1].Related = append(ls[target-1].Related, toRelate)
+			err = t.Store(tracker.File)
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(3)
+			}
 
-		err = t.Store(tracker.File)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(3)
-		}
-
-		fmt.Printf("Creating a reference to bug %v on bug %v\n", toRelate, target)
-
+			fmt.Printf("Creating a reference to bug %v on bug %v\n", toRelate, target)
+		*/
 	},
 }
 

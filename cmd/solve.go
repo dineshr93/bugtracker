@@ -17,11 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
-	"github.com/faculerena/bugtracker/internal"
 	"github.com/spf13/cobra"
-	"os"
-	"strconv"
 )
 
 // solveCmd represents the solved command
@@ -30,35 +26,39 @@ var solveCmd = &cobra.Command{
 	Short: "WIP", //"Mark a bug as solved",
 	Long:  `Use 'tracker solved <ID>' to mark a bug as solved.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 1 {
-			os.Exit(1)
-		}
-		t := &tracker.Bugs{}
 
-		if err := t.Load(tracker.File); err != nil {
-			fmt.Println(err.Error())
-			os.Exit(2)
-		}
+		/*
+			if len(args) != 1 {
+				os.Exit(1)
+			}
+			t := &tracker.storage{}
 
-		solvedID, err := strconv.Atoi(args[0])
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(3)
-		}
+			if err := t.Load(tracker.File); err != nil {
+				fmt.Println(err.Error())
+				os.Exit(2)
+			}
 
-		err = t.Solve(solvedID)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(3)
-		}
+			solvedID, err := strconv.Atoi(args[0])
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(3)
+			}
 
-		err = t.Store(tracker.File)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(3)
-		}
+			err = t.Solve(solvedID)
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(3)
+			}
 
-		fmt.Printf("Marked bug %v as solved\n", solvedID)
+			err = t.Store(tracker.File)
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(3)
+			}
+
+			fmt.Printf("Marked bug %v as solved\n", solvedID)
+
+		*/
 	},
 }
 

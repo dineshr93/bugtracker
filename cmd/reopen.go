@@ -17,11 +17,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
-	"github.com/faculerena/bugtracker/internal"
-	"os"
-	"strconv"
-
 	"github.com/spf13/cobra"
 )
 
@@ -32,36 +27,37 @@ var reopenCmd = &cobra.Command{
 	Long: `Use 'reopen <ID>' to mark a solved bug as open again. If you put a still 
 open bug, a message will appear and nothing will be modified.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 1 {
-			os.Exit(1)
-		}
-		t := &tracker.Bugs{}
+		/*
+			if len(args) != 1 {
+				os.Exit(1)
+			}
+			t := &tracker.storage{}
 
-		if err := t.Load(tracker.File); err != nil {
-			fmt.Println(err.Error())
-			os.Exit(2)
-		}
+			if err := t.Load(tracker.File); err != nil {
+				fmt.Println(err.Error())
+				os.Exit(2)
+			}
 
-		solvedID, err := strconv.Atoi(args[0])
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(3)
-		}
-		fmt.Println(solvedID)
-		err = t.Reopen(solvedID)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(3)
-		}
+			solvedID, err := strconv.Atoi(args[0])
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(3)
+			}
+			fmt.Println(solvedID)
+			err = t.Reopen(solvedID)
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(3)
+			}
 
-		err = t.Store(tracker.File)
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(3)
-		}
+			err = t.Store(tracker.File)
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(3)
+			}
 
-		fmt.Printf("Reopened bug %v\n", solvedID)
-
+			fmt.Printf("Reopened bug %v\n", solvedID)
+		*/
 	},
 }
 

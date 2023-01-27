@@ -35,20 +35,25 @@ var addCmd = &cobra.Command{
 
 		id, what, how, priority, _ := getInputAdd()
 
-		t := &tracker.Bugs{}
+		var t tracker.Storage
+
 		if err := t.Load(tracker.File); err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
 
-		t.Add(id, what, how, priority, false)
+		err := tracker.Storage.Add(t, id, what, how, priority, false)
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(2)
+		}
 
-		err := t.Store(tracker.File)
+		err = t.Store(tracker.File)
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(3)
 		}
-		fmt.Printf("Bug with ID %v created\n", id)
+		fmt.Printf("bug with ID %v created\n", id)
 	},
 }
 
